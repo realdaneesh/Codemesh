@@ -1,0 +1,237 @@
+{
+  "name": "codemesh",
+  "displayName": "CodeMesh",
+  "description": "Week 1 collaboration room prototype for VS Code.",
+  "version": "0.0.2",
+  "publisher": "codemesh",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:codemesh.inspectRecoveryVersions",
+    "onCommand:codemesh.previewCombinedText",
+    "onCommand:codemesh.inspectDifferences",
+    "onView:codemesh.sidebar",
+    "onCommand:codemesh.showActions",
+    "onCommand:codemesh.createRoom",
+    "onCommand:codemesh.joinRoom",
+    "onCommand:codemesh.leaveRoom",
+    "onCommand:codemesh.shareFile",
+    "onCommand:codemesh.endSharing",
+    "onCommand:codemesh.shareWorkspace",
+    "onCommand:codemesh.refreshWorkspace",
+    "onCommand:codemesh.workspaceChanges",
+    "onCommand:codemesh.requestFile",
+    "onCommand:codemesh.importFile",
+    "onCommand:codemesh.importWorkspace",
+    "onCommand:codemesh.endWorkspaceSharing",
+    "onUri",
+    "onCommand:codemesh.copyInviteLink",
+    "onCommand:codemesh.revokeInvitations"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codemesh.importWorkspace",
+        "title": "CodeMesh: Import Workspace Files"
+      },
+      {
+        "command": "codemesh.inspectRecoveryVersions",
+        "title": "CodeMesh: Inspect Preserved Versions"
+      },
+      {
+        "command": "codemesh.previewCombinedText",
+        "title": "CodeMesh: Preview Combined Text"
+      },
+      {
+        "command": "codemesh.inspectDifferences",
+        "title": "CodeMesh: Inspect Differences"
+      },
+      {
+        "command": "codemesh.refreshWorkspace",
+        "title": "CodeMesh: Refresh Shared Workspace",
+        "icon": "$(refresh)",
+        "enablement": "codemesh.ownsWorkspace"
+      },
+      {
+        "command": "codemesh.workspaceChanges",
+        "title": "CodeMesh: Workspace Changes"
+      },
+      {
+        "command": "codemesh.importFile",
+        "title": "CodeMesh: Import Previewed File",
+        "icon": "$(cloud-download)",
+        "enablement": "codemesh.canImportPreview"
+      },
+      {
+        "command": "codemesh.requestFile",
+        "title": "CodeMesh: Preview Workspace File"
+      },
+      {
+        "command": "codemesh.shareWorkspace",
+        "title": "CodeMesh: Share Workspace"
+      },
+      {
+        "command": "codemesh.endWorkspaceSharing",
+        "title": "CodeMesh: End Workspace Sharing"
+      },
+      {
+        "command": "codemesh.showActions",
+        "title": "CodeMesh: Room Actions"
+      },
+      {
+        "command": "codemesh.createRoom",
+        "title": "CodeMesh: Create Room"
+      },
+      {
+        "command": "codemesh.joinRoom",
+        "title": "CodeMesh: Join Room"
+      },
+      {
+        "command": "codemesh.leaveRoom",
+        "title": "CodeMesh: Leave Room"
+      },
+      {
+        "command": "codemesh.endSharing",
+        "title": "CodeMesh: End Sharing"
+      },
+      {
+        "command": "codemesh.shareFile",
+        "title": "CodeMesh: Share Current File"
+      },
+      {
+        "command": "codemesh.copyInviteLink",
+        "title": "CodeMesh: Copy Invite Link"
+      },
+      {
+        "command": "codemesh.revokeInvitations",
+        "title": "CodeMesh: Revoke Invitations"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codemesh",
+          "title": "CodeMesh",
+          "icon": "resources/codemesh.svg"
+        }
+      ]
+    },
+    "views": {
+      "codemesh": [
+        {
+          "id": "codemesh.sidebar",
+          "name": "CODEMESH"
+        }
+      ]
+    },
+    "menus": {
+      "editor/title": [
+        {
+          "command": "codemesh.importFile",
+          "when": "resourceScheme == codemesh-preview && codemesh.canImportPreview",
+          "group": "navigation"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "codemesh.refreshWorkspace",
+          "when": "view == codemesh.sidebar && codemesh.ownsWorkspace",
+          "group": "navigation"
+        },
+        {
+          "command": "codemesh.shareWorkspace",
+          "when": "view == codemesh.sidebar",
+          "group": "navigation"
+        },
+        {
+          "command": "codemesh.createRoom",
+          "when": "view == codemesh.sidebar",
+          "group": "navigation"
+        },
+        {
+          "command": "codemesh.joinRoom",
+          "when": "view == codemesh.sidebar",
+          "group": "navigation"
+        },
+        {
+          "command": "codemesh.leaveRoom",
+          "when": "view == codemesh.sidebar",
+          "group": "navigation"
+        },
+        {
+          "command": "codemesh.shareFile",
+          "when": "view == codemesh.sidebar",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CodeMesh",
+      "properties": {
+        "codemesh.serverUrl": {
+          "type": "string",
+          "default": "ws://localhost:3977",
+          "scope": "machine",
+          "description": "Relay URL for this PC: wss://<service>.onrender.com for cloud; ws://localhost:3977 or a trusted private LAN server for development. Leave room and reload after changing."
+        },
+        "codemesh.displayName": {
+          "type": "string",
+          "default": "",
+          "description": "Display name shown to other room members. Defaults to a generated user name."
+        },
+        "codemesh.invitationUrlBase": {
+          "type": "string",
+          "default": "vscode://codemesh.codemesh/join",
+          "scope": "machine",
+          "description": "VS Code invitation handler base. Must target this extension ID and /join."
+        },
+        "codemesh.connectionMode": {
+          "type": "string",
+          "enum": [
+            "lan",
+            "cloud"
+          ],
+          "default": "lan",
+          "scope": "machine",
+          "description": "Use cloud for the authenticated relay (requires wss://), or lan for existing trusted local/LAN servers. Leave Room and reload after changing."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test:lan-pilot": "node --test test/lan-pilot.cjs",
+    "test:conflict": "node --test test/conflict-proposal.cjs && node test/sync.cjs",
+    "compile": "tsc -p tsconfig.json",
+    "test:presence": "node test/presence.cjs",
+    "test:lifecycle": "node test/lifecycle.cjs",
+    "test:sync": "node test/sync.cjs",
+    "test:multi-file-sync": "node test/multi-file-sync.cjs",
+    "test:multi-file-soak": "node test/multi-file-soak.cjs",
+    "test:cursor": "node test/cursor-presence.cjs",
+    "test:selection": "node test/selection-presence.cjs",
+    "test:typing": "node test/typing-presence.cjs",
+    "test:presence-acceptance": "node test/presence-acceptance.cjs",
+    "test:acceptance": "node test/live-sync-acceptance.cjs",
+    "test:sync-soak": "node test/live-sync-acceptance.cjs --soak",
+    "test:manifest": "node test/workspace-manifest.cjs",
+    "test:files": "node test/file-content.cjs",
+    "test:import": "node test/file-import.cjs && node test/batch-import.cjs",
+    "test:editor": "node test/run-editor-tests.cjs",
+    "watch": "tsc -watch -p tsconfig.json"
+  },
+  "dependencies": {
+    "ignore": "^7.0.12",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/vscode": "^1.96.0",
+    "@types/ws": "^8.5.13",
+    "typescript": "^5.7.2"
+  }
+}

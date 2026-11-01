@@ -1,0 +1,35 @@
+{
+  "name": "codemesh",
+  "private": true,
+  "version": "0.0.1",
+  "description": "CodeMesh Week 1 monorepo",
+  "workspaces": [
+    "extension",
+    "server"
+  ],
+  "scripts": {
+    "package:lan-vsix": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-lan-vsix.ps1",
+    "verify:lan-vsix": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-lan-vsix.ps1 -VsixPath artifacts/codemesh-0.0.1-lan-pilot.vsix",
+    "compile:crdt": "tsc -p prototypes/yjs/tsconfig.json",
+    "test:crdt": "npm run compile && npm run compile:crdt && node --test prototypes/yjs/test/prototype.cjs prototypes/yjs/test/binding.cjs prototypes/yjs/test/transport.cjs",
+    "test:crdt:binding": "node --test prototypes/yjs/test/binding.cjs",
+    "test:crdt:transport": "node --test prototypes/yjs/test/transport.cjs",
+    "test:crdt:editor": "npm run compile && npm run compile:crdt && node prototypes/yjs/test/run-editor.cjs",
+    "compile": "npm run compile -w server && npm run compile -w extension",
+    "test:presence": "npm run compile -w extension && npm run test:presence -w extension",
+    "test:cursor": "npm run compile && npm run test:cursor -w server && npm run test:cursor -w extension",
+    "test:selection": "npm run compile && npm run test:selection -w server && npm run test:selection -w extension",
+    "test:typing": "npm run compile && npm run test:typing -w server && npm run test:typing -w extension",
+    "test:presence-acceptance": "npm run compile && npm run test:presence-acceptance -w extension",
+    "test:lifecycle": "npm run compile && npm run test:presence -w extension && npm run test:lifecycle -w extension && npm run test:lifecycle -w server",
+    "server": "npm run dev -w server",
+    "smoke": "node server/test/smoke.cjs",
+    "package:cloud-vsix": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-cloud-vsix.ps1",
+    "verify:cloud-vsix": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-lan-vsix.ps1 -VsixPath artifacts/codemesh-0.0.2-cloud-pilot.vsix",
+    "test:cloud": "npm run compile && node scripts/test-cloud.cjs"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "4.0.0",
+    "yjs": "13.6.33"
+  }
+}

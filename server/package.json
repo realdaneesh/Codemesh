@@ -1,0 +1,31 @@
+{
+  "name": "@codemesh/server",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "scripts": {
+    "test:listen-config": "node --test test/listen-config.cjs",
+    "compile": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "test:lifecycle": "node test/room-lifecycle.cjs",
+    "test:document-sync": "node test/document-sync.cjs",
+    "test:multi-document": "node test/multi-document.cjs",
+    "test:cursor": "node test/cursor-presence.cjs",
+    "test:selection": "node test/selection-presence.cjs",
+    "test:typing": "node test/typing-presence.cjs",
+    "test:cursor": "node test/cursor-presence.cjs",
+    "test:manifest": "node test/workspace-manifest.cjs",
+    "test:files": "node test/file-content.cjs"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
